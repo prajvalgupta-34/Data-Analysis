@@ -1,162 +1,52 @@
-# Data Analysis & Machine Learning Projects
+# Data Analysis Projects
 
-A collection of Jupyter notebooks covering exploratory data analysis, data visualization and classical machine learning (KNN, Decision Tree, Random Forest) in Python.
+These are the notebooks I've built while learning data analysis and machine learning in Python. Some are visualization practice, some are small ML models on Kaggle datasets.
 
-## Projects at a Glance
+## What's inside
 
-| # | Notebook | Topic | Type | Key Tools |
-|---|----------|-------|------|-----------|
-| 1 | [`Movie_Capstone-Project.ipynb`](Movie_Capstone-Project.ipynb) | Are Fandango movie ratings inflated? | EDA & Visualization | pandas, seaborn, matplotlib |
-| 2 | [`Seaborn.ipynb`](Seaborn.ipynb) | Credit card applicant data plots | Visualization | pandas, seaborn, matplotlib |
-| 3 | [`Student_Ai.ipynb`](Student_Ai.ipynb) | Predict students' final grade | Classification (KNN) | scikit-learn, kagglehub |
-| 4 | [`food_delivery.ipynb`](food_delivery.ipynb) | Predict online food order outcome | Classification (KNN) | scikit-learn, kagglehub |
-| 5 | [`stock_market.ipynb`](stock_market.ipynb) | Out-of-time share price forecasting | Regression | scikit-learn, matplotlib |
+- **Movie_Capstone-Project.ipynb**: checking whether Fandango's movie ratings are higher than other sites
+- **Seaborn.ipynb**: seaborn plot exercises on a credit card applicant dataset
+- **Student_Ai.ipynb**: predicting a student's final grade with KNN
+- **food_delivery.ipynb**: predicting online food order outcomes with KNN
+- **stock_market.ipynb**: forecasting share prices with Decision Tree, Random Forest and KNN
 
----
+## Movie Capstone
 
-## 1. Movie Capstone: Fandango vs. Other Rating Sites
+This one follows FiveThirtyEight's article on Fandango's ratings. I compared the stars Fandango shows against the actual ratings, then lined it up with Rotten Tomatoes, Metacritic and IMDb after scaling every score to 0-5.
 
-**Goal:** Reproduce the analysis behind FiveThirtyEight's article *"Be Suspicious Of Online Movie Ratings, Especially Fandango's"* and check whether Fandango inflates its displayed ratings.
+Fandango came out higher than the other sites, even for movies critics didn't like. The data comes from [FiveThirtyEight's GitHub](https://github.com/fivethirtyeight/data).
 
-**Data:** `fandango_scrape.csv` and `all_sites_scores.csv` from [FiveThirtyEight's data repo](https://github.com/fivethirtyeight/data) (Fandango, Rotten Tomatoes, Metacritic and IMDb scores).
+## Seaborn Exercises
 
-**What's done:**
-- Explored the relationship between votes and ratings, and extracted the release year from film titles
-- Compared Fandango's displayed `STARS` against the true `RATING` using KDE plots and a difference count plot
-- Compared Rotten Tomatoes critic vs. user scores, and found the movies with the biggest disagreement
-- Explored Metacritic and IMDb scores and vote counts
-- Merged the Fandango and all-sites tables, then normalized every score to a 0-5 scale
-- Compared rating distributions across sites with KDE plots, a histogram and a clustermap
-- Examined the 10 worst-rated movies (by Rotten Tomatoes) across all platforms
+I used the [Credit Card Approval](https://www.kaggle.com/rikdifos/credit-card-approval-prediction) dataset to recreate a few given plots: a scatter plot of age against days employed, an age histogram by occupation, box plots of income by family status, and a correlation heatmap.
 
-**Takeaway:** Fandango's displayed ratings sit noticeably higher than those of the other sites, even for films that critics rated poorly.
+## Student Grade Prediction
 
----
+Uses the [Student Performance and Study Habits](https://www.kaggle.com/datasets/harshadapatil31/student-performance-and-study-habits-dataset) dataset (1,000 students). I converted the text columns to numbers, scaled the features and trained a KNN classifier. With K=39 it reached about 78.7% accuracy.
 
-## 2. Seaborn Exercises: Credit Card Approval Data
+## Food Delivery Prediction
 
-**Goal:** Recreate a set of target plots from the credit card approval dataset to practice seaborn and pandas.
+Uses the [Online Food Ordering](https://www.kaggle.com/datasets/srisyra02/online-food-ordering-dataset) dataset. After encoding the columns and removing duplicates, a KNN classifier with 5 neighbors got about 79.2% accuracy on the test set.
 
-**Data:** [Credit Card Approval Prediction](https://www.kaggle.com/rikdifos/credit-card-approval-prediction) (`application_record.csv`) from Kaggle. Features include income, education, family status, housing type, days employed and occupation.
+## Stock Market Forecasting
 
-**Plots created:**
-- Scatter plot of days employed vs. age (employed applicants only), colored by occupation
-- Histogram of age in years, split by occupation
-- Box plots of income by family status for the bottom half of earners, split by property ownership
-- Correlation heatmap of the numeric columns
+Uses the [Stock Market Dataset](https://www.kaggle.com/datasets/jasineri/stock-market-dataset). I built features from past prices only (lags, rolling averages, day and month), trained on the first 80% of the timeline and tested on the last 20% so the model never sees the future.
 
----
-
-## 3. Student Performance Prediction
-
-**Goal:** Predict a student's final grade (A-F) from their study habits and background.
-
-**Data:** [Student Performance and Study Habits Dataset](https://www.kaggle.com/datasets/harshadapatil31/student-performance-and-study-habits-dataset) (1,000 rows, 12 columns) loaded through `kagglehub`.
-
-**Approach:**
-1. Encode categorical columns (gender, parental education, internet access, part-time job, extracurricular activities, final grade) as numbers
-2. Drop rows with missing values
-3. Split into train and test sets and scale features with `StandardScaler`
-4. Train a `KNeighborsClassifier` (Manhattan distance, `p=1`)
-
-**Result:** Best accuracy of **~78.7%** at `K = 39`.
-
----
-
-## 4. Online Food Delivery Prediction
-
-**Goal:** Predict whether a customer's order outcome (`Output`) is Yes or No from demographic information.
-
-**Data:** [Online Food Ordering Dataset](https://www.kaggle.com/datasets/srisyra02/online-food-ordering-dataset) loaded through `kagglehub`.
-
-**Approach:**
-1. Encode ordinal columns (monthly income, education, customer type, feedback) with manual mappings
-2. Check for missing values and duplicates, then drop duplicates
-3. One-hot encode the remaining categorical features
-4. Train a `KNeighborsClassifier` with `n_neighbors=5`
-
-**Features used:** age, gender, marital status, occupation, monthly income, education, family size, customer type, latitude, longitude and pin code.
-
-**Result:** Test accuracy of **~79.2%**.
-
----
-
-## 5. Stock Market: Out-of-Time Share Price Extrapolation
-
-**Goal:** Forecast future share prices using only past information, with a strict chronological split so there is no data leakage.
-
-**Data:** [Stock Market Dataset](https://www.kaggle.com/datasets/jasineri/stock-market-dataset) loaded through `kagglehub`.
-
-**Approach:**
-- Auto-detect the ID, timestamp and price columns, with manual overrides available
-- Build features from earlier rows only: price lags (1, 2, 3, 5), 1-step return, rolling mean (3 and 5) and rolling std (5), day of week and month
-- Train on the earliest 80% of the timeline and test on the latest 20%
-- Compare three regressors and plot actual vs. predicted prices for one stock
-
-**Results:**
-
-| Model | RMSE ($) | MAE ($) | R² |
-|-------|---------:|--------:|---:|
+| Model | RMSE | MAE | R² |
+|---|---|---|---|
 | Decision Tree | 6181.33 | 158.86 | 0.9979 |
-| **Random Forest** | **2508.10** | **76.33** | **0.9997** |
-| K-Nearest Neighbors | 3994.33 | 457.08 | 0.9991 |
+| Random Forest | 2508.10 | 76.33 | 0.9997 |
+| KNN | 3994.33 | 457.08 | 0.9991 |
 
-Random Forest gave the lowest error on all three metrics.
+Random Forest did best on all three. The R² values are very high partly because yesterday's price is already a strong hint for today's.
 
----
+## Running the notebooks
 
-## Getting Started
-
-### Prerequisites
-- Python 3.9+
-- Jupyter Notebook or JupyterLab
-
-### Installation
+You'll need Python 3 and Jupyter.
 
 ```bash
-git clone https://github.com/<your-username>/<your-repo>.git
-cd <your-repo>
 pip install pandas numpy matplotlib seaborn scikit-learn scipy kagglehub jupyter
-```
-
-### Run
-
-```bash
 jupyter notebook
 ```
 
-Then open any notebook and run the cells in order.
-
-### Data Setup
-
-| Notebook | How to get the data |
-|----------|---------------------|
-| Student_Ai, food_delivery, stock_market | Downloaded automatically with `kagglehub` (may require Kaggle credentials) |
-| Movie_Capstone-Project | Download `fandango_scrape.csv` and `all_sites_scores.csv` from [FiveThirtyEight](https://github.com/fivethirtyeight/data) and place them next to the notebook |
-| Seaborn | Download `application_record.csv` from [Kaggle](https://www.kaggle.com/rikdifos/credit-card-approval-prediction) and place it next to the notebook |
-
-## Tech Stack
-
-Python · pandas · NumPy · Matplotlib · seaborn · scikit-learn · SciPy · kagglehub · Jupyter
-
-## Repository Structure
-
-```
-.
-├── Movie_Capstone-Project.ipynb
-├── Seaborn.ipynb
-├── Student_Ai.ipynb
-├── food_delivery.ipynb
-├── stock_market.ipynb
-└── README.md
-```
-
-## Acknowledgements
-
-- [FiveThirtyEight](https://github.com/fivethirtyeight/data) for the Fandango data
-- Pierian Data for the Seaborn exercise template and Movie Capstone project outline
-- Kaggle dataset authors for the credit card, student, food ordering and stock market datasets
-
-## License
-
-Add a license of your choice (for example MIT) before publishing.
+The Student, Food Delivery and Stock Market notebooks download their data through `kagglehub`, which may ask for your Kaggle login. For the Movie and Seaborn notebooks, download the CSV files from the links above and put them in the same folder as the notebook.
